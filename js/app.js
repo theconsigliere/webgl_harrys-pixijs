@@ -46,7 +46,7 @@ function story() {
       start: "top bottom-=10%",
       end: "bottom bottom-=10%",
       // scrub: true,
-      markers: true,
+      // markers: true,
       onEnter: () => {
         tl.play()
         circles[i].classList.add("js-active")
