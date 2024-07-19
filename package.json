@@ -4,10 +4,7 @@
     "dev": "vite"
   },
   "dependencies": {
-    "gsap": "^3.12.2",
-    "lil-gui": "^0.18.2",
-    "math-fit": "^1.0.1",
-    "pixi.js": "^8.2.5",
+    "gsap": "./gsap-bonus.tgz",
     "vite": "^5.0.10",
     "vite-plugin-glsl": "^1.1.2"
   }
