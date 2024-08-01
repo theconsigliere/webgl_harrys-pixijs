@@ -5,6 +5,7 @@
   },
   "dependencies": {
     "gsap": "./gsap-bonus.tgz",
+    "lenis": "^1.1.9",
     "vite": "^5.0.10",
     "vite-plugin-glsl": "^1.1.2"
   }

@@ -3,6 +3,8 @@ import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { DrawSVGPlugin } from "gsap/DrawSVGPlugin"
 import { splitTextLines } from "./split-text-lines"
 
+import Lenis from "lenis"
+
 gsap.registerPlugin(DrawSVGPlugin, ScrollTrigger)
 
 function story() {
@@ -11,25 +13,47 @@ function story() {
   const originalTitles = Array.from(document.querySelectorAll(".js-title"))
   const originalDescs = Array.from(document.querySelectorAll(".js-desc"))
   const circles = Array.from(document.querySelectorAll(".js-line-circle"))
+  const lineTitles = Array.from(document.querySelectorAll(".js-line-title"))
   const lines = Array.from(document.querySelectorAll(".js-line"))
   const timelines = {}
   const titles = []
   const descs = []
 
-  //TODO 1: Split the text lines
-  // TODO 2: create a timeline
-  // TODO 3: animate the image
-  // TODO 4: animate the path
+  //LENIS
+
+  const lenis = new Lenis()
+
+  lenis.on("scroll", ScrollTrigger.update)
+
+  gsap.ticker.add((time) => {
+    lenis.raf(time * 1000)
+  })
+
+  gsap.ticker.lagSmoothing(0)
 
   gsap.set(paths, {
     drawSVG: "0%",
   })
 
+  gsap.set(lines, {
+    yPercent: -100,
+  })
+
+  //map through line titles if odd set yPercent to 100 else -100
+  lineTitles.map((lineTitle, i) => {
+    if (i % 2 === 0) {
+      gsap.set(lineTitle, {
+        xPercent: 100,
+      })
+    } else {
+      gsap.set(lineTitle, {
+        xPercent: -100,
+      })
+    }
+  })
+
   originalTitles.map((title) => titles.push(splitTextLines(title)))
-
   originalDescs.map((desc) => descs.push(splitTextLines(desc)))
-
-  console.log(titles)
 
   items.forEach((item, i) => {
     const tl = gsap.timeline({
@@ -39,34 +63,21 @@ function story() {
         ease: "expo.out",
       },
       paused: true,
-    })
-
-    ScrollTrigger.create({
-      trigger: item,
-      start: "top bottom-=10%",
-      end: "bottom bottom-=10%",
-      // scrub: true,
-      // markers: true,
-      onEnter: () => {
-        tl.play()
+      scrollTrigger: {
+        trigger: items[i],
+        start: "top center+=25%",
+        end: "bottom center+=25%",
+        // markers: true,
+      },
+      onStart: () => {
         circles[i].classList.add("js-active")
       },
-      onLeaveBack: () => {
-        circles[i].classList.remove("js-active")
-      },
-      onEnterBack: () => {
-        circles[i].classList.add("js-active")
-      },
-      onLeave: () => {
+      onComplete: () => {
         circles[i].classList.remove("js-active")
       },
     })
 
-    tl.to(paths[i], {
-      drawSVG: "100%",
-      ease: "none",
-      // duration: 3.5,
-    }).to(
+    tl.to(
       [titles[i], descs[i]],
       {
         yPercent: 0,
@@ -74,6 +85,44 @@ function story() {
       },
       0
     )
+
+    tl.to(
+      paths[i],
+      {
+        drawSVG: "100%",
+        ease: "none",
+        scrollTrigger: {
+          trigger: items[i],
+          start: "top center+=25%",
+          end: "bottom center+=25%",
+          scrub: 1,
+          // once: true,
+        },
+      },
+      0
+    )
+
+    tl.to(
+      lineTitles[i],
+      {
+        xPercent: 0,
+        duration: 0.75,
+        ease: "expo.out",
+      },
+      0
+    )
+
+    tl.to(lines[i], {
+      yPercent: 0,
+      scrollTrigger: {
+        trigger: items[i],
+        start: "top center+=25%",
+        end: "bottom center+=25%",
+        scrub: true,
+
+        // once: true,
+      },
+    })
   })
 }
 
