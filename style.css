@@ -166,7 +166,7 @@ h3 {
 
   &.opposite-image-group {
     .story__svg {
-      transform: translateX(10%);
+      /* transform: translateX(10%); */
     }
   }
 }
@@ -177,11 +177,11 @@ h3 {
   width: 100%;
   aspect-ratio: 3/4;
   display: flex;
-  transform: translateX(-10%);
+  /* transform: translateX(-10%); */
 }
 
 .story__svg-image {
-  width: auto;
+  width: 100%;
   height: 100%;
   object-fit: cover;
 }

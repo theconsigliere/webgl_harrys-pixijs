@@ -90,12 +90,12 @@ function story() {
       paths[i],
       {
         drawSVG: "100%",
-        ease: "none",
+        ease: "linear",
         scrollTrigger: {
           trigger: items[i],
           start: "top center+=25%",
           end: "bottom center+=25%",
-          scrub: 1,
+          scrub: 6,
           // once: true,
         },
       },
